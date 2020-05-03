@@ -39,7 +39,7 @@ class Producer:
         #
         self.broker_properties = {
             "bootstrap.servers": "PLAINTEXT://localhost:9092",
-            "schema.registry.url": "http://localhost:8081"
+            "schema.registry.url": "http://localhost:8081",
             "client.id": "traffic.producer"
         }
 
