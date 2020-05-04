@@ -39,11 +39,9 @@ class Station(Producer):
         #
         topic_name = f"arrival.{station_name}" # TODO: Come up with a better topic name
         super().__init__(
-            topic_name,
-            key_schema=Station.key_schema,
+            topic_name, key_schema=Station.key_schema,
             value_schema=Station.value_schema,
-            num_partitions=1,
-            num_replicas=1,
+            num_partitions=1, num_replicas=1,
         )
 
         self.station_id = int(station_id)
@@ -62,19 +60,20 @@ class Station(Producer):
         # TODO: Complete this function by producing an arrival message to Kafka
         #
         #
-        logger.info("arrival kafka integration incomplete - skipping")
+        value_dict = {
+            "station_id": self.station_id,
+            "train_id": train.train_id,
+            "direction": direction,
+            "line": self.color.name,
+            "train_status": train.status.name,
+            "prev_station_id": prev_station_id,
+            "prev_direction": prev_direction
+        }
+        logger.info(f"produce message {value_dict} to topic {self.topic_name}")
         self.producer.produce(
            topic=self.topic_name,
            key={"timestamp": self.time_millis()},
-           value={
-               "station_id": self.station_id,
-               "train_id": train.train_id,
-               "direction": direction,
-               "line": self.color.name,
-               "train_status": train.status,
-               "prev_station_id": prev_station_id,
-               "prev_direction": prev_direction
-           },
+           value=value_dict
         )
 
     def __str__(self):

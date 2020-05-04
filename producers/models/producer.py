@@ -63,7 +63,6 @@ class Producer:
         # the Kafka Broker.
         #
         #
-        logger.info("topic creation kafka integration incomplete - skipping")
         new_topic = NewTopic(
             self.topic_name, num_partitions=self.num_partitions,
             replication_factor=self.num_replicas,
@@ -74,7 +73,7 @@ class Producer:
             try:
                 future.result()
                 logger.info(f"topic {topic} is created!")
-            except expression as e:
+            except Exception as e:
                 logger.error(f"Failed to create topic {topic}: {e}")
     
 
@@ -85,7 +84,6 @@ class Producer:
         # TODO: Write cleanup code for the Producer here
         #
         #
-        logger.info("producer close incomplete - skipping")
         if self.producer is not None:
             self.producer.flush()
             self.producer = None
