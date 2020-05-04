@@ -37,11 +37,11 @@ class Station(Producer):
         # replicas
         #
         #
-        topic_name = f"arrival.{station_name}" # TODO: Come up with a better topic name
+        topic_name = f"org.chicago.arrival.event" # TODO: Come up with a better topic name
         super().__init__(
             topic_name, key_schema=Station.key_schema,
             value_schema=Station.value_schema,
-            num_partitions=1, num_replicas=1,
+            num_partitions=3, num_replicas=1,
         )
 
         self.station_id = int(station_id)
