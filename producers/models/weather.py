@@ -37,7 +37,7 @@ class Weather(Producer):
         #
         #
         super().__init__(
-            "org.chicago.weather.event", # TODO: Come up with a better topic name
+            "org.chicago.cta.weather.v1", # TODO: Come up with a better topic name
             key_schema=Weather.key_schema,
             value_schema=Weather.value_schema,
             num_partitions=3, num_replicas=1
