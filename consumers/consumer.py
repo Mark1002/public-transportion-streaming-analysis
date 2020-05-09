@@ -32,7 +32,6 @@ class KafkaConsumer:
 
         self.broker_properties = {
             "bootstrap.servers": "PLAINTEXT://localhost:9092",
-            "schema.registry.url": "http://localhost:8081",
             "group.id": "traffic.consumer"
         }
 
@@ -46,7 +45,7 @@ class KafkaConsumer:
                 self.broker_properties
             )
 
-        self.consumer.subscribe([self.topic_name_pattern], listener=self.on_assign)
+        self.consumer.subscribe([self.topic_name_pattern], on_assign=self.on_assign)
 
     def on_assign(self, consumer, partitions):
         """Callback for when topic assignment takes place"""
@@ -75,7 +74,7 @@ class KafkaConsumer:
                 logger.error(f'error: {message.error()}')
             else:
                 logger.info(f"consumed message {message.key()}: {message.value()}")
-                self.message_handler.process_message(message)
+                self.message_handler(message)
                 return 1
         except Exception as e:
             logger.error(e)
