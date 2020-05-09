@@ -23,14 +23,22 @@ KSQL_URL = "http://localhost:8088"
 
 KSQL_STATEMENT = """
 CREATE TABLE turnstile (
-    ???
+    station_id int,
+    station_name varchar,
+    line varchar
 ) WITH (
-    ???
+    kafka_topic='org.chicago.turnstile.event',
+    value_format='avro',
+    key='station_id'
 );
 
 CREATE TABLE turnstile_summary
-WITH (???) AS
-    ???
+WITH (
+    kafka_topic='TURNSTILE_SUMMARY',
+    value_format='json'
+) AS
+SELECT station_id, COUNT(*) AS count FROM turnstile
+GROUP BY station_id;
 """
 
 
@@ -53,7 +61,10 @@ def execute_statement():
     )
 
     # Ensure that a 2XX status code was returned
-    resp.raise_for_status()
+    try:
+        resp.raise_for_status()
+    except:
+        logger.error(f"ksql error! {json.dumps(resp.json(), indent=2)}")
 
 
 if __name__ == "__main__":
